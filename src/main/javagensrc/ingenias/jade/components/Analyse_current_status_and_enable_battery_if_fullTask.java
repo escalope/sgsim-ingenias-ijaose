@@ -1,3 +1,4 @@
+
 /*
  Copyright (C) 2005 Jorge Gomez Sanz
 
@@ -104,12 +105,13 @@ public class Analyse_current_status_and_enable_battery_if_fullTask extends Task 
 		Hashtable<String, mired.ucm.grid.TypesElement> devices;
 		try {
 			String device = eiAssociatedUnit.getdevice();
+			System.out.println("querying " + device);
 			mired.ucm.remote.orders.RemoteBatteryOrder batteryCharge = new mired.ucm.remote.orders.RemoteBatteryOrder(
-					device, 10000);
+					"Battery_31", 10000);
 			mired.ucm.remote.orders.RemoteBatteryOrder batteryDischarge = new mired.ucm.remote.orders.RemoteBatteryOrder(
-					device, 0);
+					"Battery_31", 0);
 
-			if (eaSMClient.getBatteryEnergy(device) <= 20000
+			if (eaSMClient.getBatteryEnergy("Battery_31") <= 20000
 					&& new Date(eaSMClient.getSimTime()).getHours() > 0
 					&& new Date(eaSMClient.getSimTime()).getHours() <= 7
 					&& mired.ucm.Utils.noOrderXAfterLastY(
@@ -129,7 +131,7 @@ public class Analyse_current_status_and_enable_battery_if_fullTask extends Task 
 				System.out.println("sending switch on order to " + device);
 
 			} else {
-				if (eaSMClient.getBatteryEnergy(device) > 20000
+				if (eaSMClient.getBatteryEnergy("Battery_31") > 20000
 						&& new Date(eaSMClient.getSimTime()).getHours() > 14
 						&& new Date(eaSMClient.getSimTime()).getHours() < 18
 						&& (!eiOrdersHistory.getHistory().isEmpty() || eiOrdersHistory
@@ -142,7 +144,8 @@ public class Analyse_current_status_and_enable_battery_if_fullTask extends Task 
 							.getHistory()
 							.add(new mired.ucm.Pair<Long, mired.ucm.remote.orders.RemoteOrder>(
 									eaSMClient.getSimTime(), batteryDischarge));
-					System.out.println("sending switch on order to " + device);
+					System.out.println("sending switch on order to "
+							+ "Battery_31");
 				}
 			}
 
